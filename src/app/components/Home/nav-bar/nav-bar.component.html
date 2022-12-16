@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg bg-warning  navItem" style="z-index: 100;">
+    <div class="container-fluid">
+        <a class="navbar-brand " href="#">
+            <img src="../../../../assets/extra-logos/extra-logos_black.png" width="50px" height="50px" style="scale: 6px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavBar() ">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" [ngbCollapse]="isNavbarCollapsed" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link fw-bold" aria-current="page" routerLink="/" [routerLinkActive]="'active'">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold" aria-current="page" routerLink="/category" [routerLinkActive]="'active'">Products</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu fw-bold">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item fw-bold" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled">Disabled</a>
+                </li>
+            </ul>
+            <div class="">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="user === null">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/login" [routerLinkActive]="'active'">
+                            <fa-icon [icon]="login" class="me-2"></fa-icon>Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/register" [routerLinkActive]="'active'">
+                            <fa-icon [icon]="register" class="me-2"></fa-icon>Register</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="user != null">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/profile" [routerLinkActive]="'active'">
+                            <fa-icon [icon]="login" class="me-2"></fa-icon>{{user.name.firstname + ' ' + user.name.lastname}}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/register" [routerLinkActive]="'active'">
+                            <fa-icon [icon]="facart" class="me-2"></fa-icon>Cart <span class="text-success">({{cart}})</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

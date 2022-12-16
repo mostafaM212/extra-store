@@ -1,0 +1,13 @@
+<section>
+    <div class="d-flex justify-content-between">
+        <p class="fw-bold h3 text-warning">Your Cart was in {{dateString}}</p>
+        <p class="fw-bold h3 text-warning" *ngIf="price">Your Cart with <span class="text-success">{{price}}</span>$</p>
+
+    </div>
+    <div class="outer-wrapper">
+        <div class="inner-wrapper">
+            <app-product-component *ngFor="let product of products" [product]="product"></app-product-component>
+        </div>
+    </div>
+    <div class="pseduo-track"></div>
+</section>

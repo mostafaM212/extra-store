@@ -1,0 +1,18 @@
+<div id="carouselExampleIndicators" class="carousel slide w-100" data-bs-ride="true">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" [class]="{ 'active' : currentCardNumber  === 0}"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" [class]="{ 'active' : currentCardNumber  === 1}" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" [class]="{ 'active' : currentCardNumber  === 2}"></button>
+    </div>
+    <div class="carousel-inner" style="height: 500px;">
+        <app-header-photo *ngFor="let photo of headerCards" [currentCardNumber]="currentCardNumber" [imagePath]="photo.path" [imgNumber]="photo.number"></app-header-photo>
+    </div>
+    <button class="carousel-control-prev " type="button " data-bs-target="#carouselExampleIndicators " data-bs-slide="prev " (click)="previousCard() ">
+        <span class="carousel-control-prev-icon " aria-hidden="true "></span>
+        <span class="visually-hidden ">Previous</span>
+    </button>
+    <button class="carousel-control-next " type="button " data-bs-target="#carouselExampleIndicators " data-bs-slide="next " (click)="nextCard() ">
+        <span class="carousel-control-next-icon " aria-hidden="true "></span>
+        <span class="visually-hidden ">Next</span>
+    </button>
+</div>

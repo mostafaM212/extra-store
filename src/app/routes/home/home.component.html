@@ -1,0 +1,11 @@
+<div class="w-100 bg-warning">
+    <app-header-banal></app-header-banal>
+    <div class="d-flex justify-content-center">
+        <div class="w-50">
+            <app-header-card></app-header-card>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-4 mb-3" *ngFor="let category of categories">
+    <app-category-section [categoryName]="category.name"></app-category-section>
+</div>

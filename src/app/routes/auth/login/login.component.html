@@ -1,0 +1,40 @@
+<div class="container-fluid h-100 mb-5">
+    <app-error [errorMessage]="error" *ngIf="error.length > 0" [@opacity]></app-error>
+    <div class="row mt-5 mb-5 d-flex justify-content-between ">
+        <div class="col-6 d-flex justify-content-center ">
+            <div class="w-75 bg-warning p-2 rounded-4">
+                <p class="h5 fw-bold text-white text-center p-2">Login</p>
+                <form #form="ngForm" (ngSubmit)="onSubmitHandler()">
+                    <div class="border-top border-white ">
+                        <div class="mt-2">
+                            <label for="email" class="fw-bold text-white">Username</label>
+                            <input type="text" class="form-control form-control" name="email" ngModel #email="ngModel" required>
+                            <p class="h6 text-danger" *ngIf="email.invalid && email.touched">email field is required</p>
+                        </div>
+                        <div class="mt-2">
+                            <label for="password" class="fw-bold text-white">Password</label>
+                            <input type="password" class="form-control form-control" placeholder="*************" required minlength="5" ngModel name="password" #password="ngModel">
+                            <p class="h6 text-danger" *ngIf="password.invalid && password.touched">password field is required with 6 characters at least</p>
+
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn btn-outline-success" *ngIf="!loading" [disabled]="form.invalid && disabled">
+                                <fa-icon [icon]="user" class="me-2"></fa-icon>
+                                login
+                            </button>
+                            <button class="btn btn-outline-success" type="button" disabled *ngIf="loading">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <a [routerLink]="[ '/register' ]" class="text-white text-decoration-none">You have an account ?</a>
+            </div>
+        </div>
+        <div class="col-6 d-flex justify-content-center">
+            <img src="../../../../assets/extra-logos/extra-1.png" width="300px" height="300px" class="rounded-5" [@rotate]="animationState">
+        </div>
+    </div>
+    <div class="row"></div>
+</div>

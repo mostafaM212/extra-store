@@ -1,0 +1,20 @@
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+
+.count {
+    width: 75%;
+}
+
+.formColumn {
+    width: 25%;
+}
+
+@media (max-width: 600px) {
+    .count {
+        width: 100%;
+    }
+    .formColumn {
+        width: 45%;
+    }
+}

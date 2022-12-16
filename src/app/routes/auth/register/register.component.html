@@ -1,0 +1,96 @@
+<div class="container-fluid d-flex justify-content-center flex-column ">
+    <div class="row d-flex justify-content-center mt-2 ">
+        <div class="bg-warning count  rounded-2">
+            <p class="h3 fw-bold text-white text-center">Register</p>
+        </div>
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmitHandler()">
+        <div class="row d-flex justify-content-center">
+            <div class="d-flex justify-content-between count">
+
+                <div class=" w-50">
+                    <div class="">
+                        <label for="username" class=" fw-bold fst-italic">Username</label>
+                        <input type="text" class="form-control" placeholder="username" name="username" ngModel required minlength="4" #username="ngModel">
+                        <p class="h6 text-danger" *ngIf="username.invalid && username.touched">username field is required with 4 characters at least</p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="email" class=" fw-bold fst-italic">Email</label>
+                        <input type="email" class="form-control" placeholder="example@example.com" name="email" ngModel required email #email="ngModel">
+                        <p class="h6 text-danger" *ngIf="email.invalid && email.touched">Email field is required</p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="password" class=" fw-bold fst-italic">Password</label>
+                        <input type="password" class="form-control" placeholder="password" name="password" ngModel required minlength="6" #password="ngModel">
+                        <p class="h6 text-danger" *ngIf="password.invalid && password.touched">password field is required with 6 characters at least</p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="zipCode" class="fw-bold fst-italic">Zip Code</label>
+                        <input type="text" class="form-control" placeholder="Zip Code" name="zipCode" ngModel required #zipCode="ngModel">
+                        <p class="h6 text-danger" *ngIf="zipCode.invalid && zipCode.touched">Zip Code field is required
+                        </p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="phone" class="fw-bold fst-italic">Phone</label>
+                        <input type="tel" class="form-control" placeholder="phone" name="phone" ngModel required #phone="ngModel">
+                        <p class="h6 text-danger" *ngIf="phone.invalid && phone.touched">phone field is required</p>
+
+                    </div>
+                </div>
+                <div class="formColumn ">
+                    <div class="">
+                        <label for="fname" class="fw-bold fst-italic">First Name</label>
+                        <input type="text" class="form-control" name="fname" ngModel required #fname="ngModel" minlength="3">
+                        <p class="h6 text-danger" *ngIf="fname.invalid && fname.touched">first name field is required with 3 characters at least</p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="lname" class="fw-bold fst-italic">Last Name</label>
+                        <input type="text" class="form-control" name="lname" ngModel required #lname="ngModel" minlength="3">
+                        <p class="h6 text-danger" *ngIf="lname.invalid && lname.touched">last name field is required with 3 characters at least</p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="city" class="fw-bold fst-italic">City</label>
+                        <select name="city" id="" class="form-control form-select" ngModel required #city="ngModel">
+                            <option *ngFor="let country of countries" [value]="country">{{country}}</option>
+
+                        </select>
+                    </div>
+                    <div class="w-100">
+                        <label for="street" class="fw-bold fst-italic">Street</label>
+                        <input type="text" class="form-control" name="street" ngModel required #street="ngModel" minlength="3">
+                        <p class="h6 text-danger" *ngIf="street.invalid && street.touched">street field is required with 6 characters at least</p>
+
+                    </div>
+                    <div class="w-100">
+                        <label for="number" class="fw-bold fst-italic">Number</label>
+                        <input type="number" class="form-control" name="number" ngModel required #number="ngModel">
+                        <p class="h6 text-danger" *ngIf="number.invalid && number.touched">number field is required </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row d-flex justify-content-center mt-3">
+            <div class="col-6 d-flex justify-content-center">
+                <button type="submit" class="btn btn-outline-success" [disabled]="form.invalid">
+                    <fa-icon [icon]="userPlus" class="me-2"></fa-icon>
+                    Register</button>
+            </div>
+        </div>
+    </form>
+    <div class="row d-flex justify-content-center mb-2">
+        <div class="w-75">
+            <a [routerLink]="[ '/login' ]" class="text-decoration-none text-warning">You Already have an account ?</a>
+
+        </div>
+    </div>
+</div>
