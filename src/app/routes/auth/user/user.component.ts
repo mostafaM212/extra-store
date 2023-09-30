@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Cart } from 'src/app/models/Cart.model';
 
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, DoCheck, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/AuthService.service';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/User.model';
@@ -19,39 +19,28 @@ import { CartService } from 'src/app/services/CartService.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, DoCheck, AfterContentInit {
   userIcon = faUser;
   phone = faPhone;
   cart = faCartPlus;
   address = faAddressBook;
   money = faMoneyBill;
   userCarts: Cart[] = [];
-  user: User | null = null;
   totalPrice: number = 0;
+  showSpinner: boolean = false;
   constructor(
-    private authService: AuthService,
-    private store: Store<{
-      auth: { user: User; token: string; carts: Cart[]; totalPrice: number };
-    }>
-  ) {
-    this.authService.getUserId.subscribe((data) => {
-      console.log(data, 'ser');
-    });
-  }
+    public authService: AuthService,
+    private cartService: CartService
+  ) {}
+  ngAfterContentInit(): void {}
 
   ngOnInit(): void {
+    this.showSpinner = true;
     let carts: Cart[] = [];
-    this.store.select('auth').subscribe((data) => {
-      this.user = data.user;
-      data.carts.map((cart) => {
-        if (cart.totalPrice) {
-          this.totalPrice += cart.totalPrice;
-        }
-      });
-      if (data.carts.length > 0) {
-        this.userCarts = data.carts;
-        carts = data.carts;
-      }
-    });
+
+    setTimeout(() => {
+      this.showSpinner = false;
+    }, 2000);
   }
+  ngDoCheck(): void {}
 }

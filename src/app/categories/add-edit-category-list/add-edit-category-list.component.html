@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="container-fluid d-flex justify-content-center flex-column ">
+        <div class="row d-flex justify-content-center mt-2 ">
+            <div class="bg-warning count  rounded-2">
+                <p class="h3 fw-bold text-white text-center">Category</p>
+            </div>
+        </div>
+        <div class="container full-width">
+            <form class="example-form " [formGroup]="categoryForm">
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" value="Sushi" formControlName="name">
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Logo</mat-label>
+                    <input matInput placeholder="Logo" value="Sushi" formControlName="logo">
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Ex. It makes me feel..." formControlName="description"></textarea>
+                </mat-form-field>
+                <div class="container">
+                    <button mat-raised-button (click)="save()" color="primary" type="submit" [disabled]="isLoading">
+                      <span *ngIf="!isLoading">save</span>
+                      <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+                    </button>
+
+                </div>
+            </form>
+        </div>
+        <div class="row d-flex justify-content-center mb-2">
+            <div class="w-75">
+                <a [routerLink]="[ '/login' ]" class="text-decoration-none text-warning">You Already have an account ?</a>
+
+            </div>
+        </div>
+    </div>
+</div>

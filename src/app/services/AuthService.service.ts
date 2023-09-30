@@ -6,12 +6,13 @@ import { Router } from '@angular/router';
 import { User } from './../models/User.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import {
   loginUserAction,
   setUserCartsAction,
 } from '../store/actions/auth.actions';
 import { CartService } from './CartService.service';
+import { environment } from '../../environments/environment';
 
 interface CammeingCart {
   userId: number;
@@ -22,13 +23,14 @@ interface CammeingCart {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  baseUrl: string = environment.backendUrl + 'users';
   userNumberOfCarts: BehaviorSubject<number> = new BehaviorSubject(0);
   getUserId: BehaviorSubject<number> = new BehaviorSubject(-1);
-  userId: number = -1;
   userProducts: any[] = [];
-  logginError: BehaviorSubject<string | null> = new BehaviorSubject<
-    string | null
-  >(null);
+  isAuthenticated$ = new BehaviorSubject<boolean>(false);
+  user$ = new BehaviorSubject<User | null>(null);
+  token$ = new BehaviorSubject<string | null>(null);
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -37,81 +39,43 @@ export class AuthService {
     private cartService: CartService
   ) {}
 
-  register = (user: User): void => {
-    this.http.post('https://fakestoreapi.com/users', user).subscribe(
-      (data: any) => {
-        user._id = data.id;
-        this.router.navigate(['login']);
-      },
-      (e) => {
-        console.log(e);
-      }
+  register(user: User) {
+    return this.http.post(this.baseUrl, user);
+  }
+
+  login = (data: any) => {
+    return this.http.post<{ token: string; user: User; message: string }>(
+      this.baseUrl + '/login',
+      data
     );
   };
 
-  login = (
-    username: string,
-    password: string,
-    user: User | undefined
-  ): void => {
-    this.http
-      .post<{ token: string }>('https://fakestoreapi.com/auth/login', {
-        username: username,
-        password: password,
-      })
-      .subscribe(
-        (data: { token: string }) => {
-          if (user) {
-            this.getUserId.next(user._id);
-            this.store.dispatch(
-              loginUserAction({ user: user, token: data['token'] })
-            );
-
-            this.userId = user._id;
-            let transformedData = JSON.stringify({ token: data.token, user });
-            localStorage.setItem('data', transformedData);
-            this.router.navigate(['profile']);
-          }
-        },
-        (e) => {
-          this.onLogInError(e.status);
-        }
-      );
-  };
-
   autoLogin = (): void => {
-    let data = localStorage.getItem('data');
-    if (data !== null) {
-      let transformedData = JSON.parse(data);
+    let tokenExpirationDate = localStorage.getItem('tokenExpirationDate');
+    if (
+      tokenExpirationDate !== null &&
+      new Date(tokenExpirationDate) > new Date()
+    ) {
+      console.log('test', 'is logged in ');
+      try {
+        let user = localStorage.getItem('user');
+        let token = localStorage.getItem('token');
 
-      let user = new User(
-        transformedData.user.id,
-        transformedData.user.email,
-        transformedData.user.username,
-        transformedData.user.password,
-        transformedData.user.name,
-        transformedData.user.address,
-        transformedData.user.phone
-      );
-      this.userId = user._id;
-      this.getUserId.next(user._id);
-
-      this.productsService.getAllProducts();
-      this.http
-        .get<CammeingCart[]>('https://fakestoreapi.com/carts/user/' + user._id)
-        .subscribe((data) => {
-          this.store.dispatch(
-            setUserCartsAction({ carts: this.setUserCart(data) })
-          );
-          this.userNumberOfCarts.next(data.length);
-        });
-      this.store.dispatch(
-        loginUserAction({ user, token: transformedData.token })
-      );
+        if (user !== null && token !== null) {
+          user = JSON.parse(user);
+          this.user$.next(user as any);
+          this.isAuthenticated$.next(true);
+          this.token$.next(token);
+        }
+      } catch (error) {
+        this.logout();
+        console.log('test', error);
+      }
+    } else {
+      this.logout();
     }
   };
   getUserCarts = (userId: number): Cart[] => {
-    console.log(userId, 'id');
     let userCart: Cart[] = [];
     this.http
       .get<CammeingCart[]>('https://fakestoreapi.com/carts/user/' + userId)
@@ -159,16 +123,28 @@ export class AuthService {
         )
       );
     });
-    console.log(userCart);
 
     return userCart;
   };
 
-  onLogInError = (errorCode: number) => {
-    if (errorCode == 401) {
-      this.logginError.next('invalid username or password');
-    } else if (errorCode == 0) {
-      this.logginError.next('please check the Enternet connection');
+  saveUserDataToLocalStorage(LoginRequest: any) {
+    try {
+      localStorage.setItem('token', LoginRequest.token);
+      localStorage.setItem('user', JSON.stringify(LoginRequest.user));
+      localStorage.setItem(
+        'tokenExpirationDate',
+        new Date(new Date().setHours(new Date().getHours() + 1)).toISOString()
+      );
+    } catch (error) {
+      console.log('test', error);
     }
-  };
+  }
+  logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpirationDate');
+    this.user$.next(null);
+    this.isAuthenticated$.next(false);
+    this.token$.next(null);
+  }
 }

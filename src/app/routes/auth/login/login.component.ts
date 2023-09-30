@@ -3,7 +3,7 @@ import { User } from './../../../models/User.model';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   animate,
   state,
@@ -12,6 +12,8 @@ import {
   trigger,
 } from '@angular/animations';
 import { AuthService } from 'src/app/services/AuthService.service';
+import { Subject, finalize, tap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -53,20 +55,21 @@ import { AuthService } from 'src/app/services/AuthService.service';
     ]),
   ],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  _unsubscribe$ = new Subject<boolean>();
   user = faUser;
   @ViewChild('form') form: NgForm | undefined;
   animationState: string = 'with';
   users: User[] = [];
   disabled: boolean = false;
   error: string = '';
-  loading: boolean = false;
+  isLoading: boolean = false;
   constructor(
     private authService: AuthService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
-
   ngOnInit(): void {
     setInterval(() => {
       this.animationState = Math.random() + '';
@@ -77,27 +80,31 @@ export class LoginComponent implements OnInit {
       .subscribe((data) => {
         this.users = data;
       });
-    this.authService.logginError.subscribe((data) => {
-      if (data) {
-        this.error = data;
-        this.loading = false;
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
-      }
-    });
   }
 
   onSubmitHandler = () => {
-    this.loading = true;
-    this.disabled = true;
-    const user: User | undefined = this.users.find(
-      (user) => user.username === this.form?.value['email']
-    );
-    this.authService.login(
-      this.form?.value['email'],
-      this.form?.value['password'],
-      user
-    );
+    if (this.form?.invalid) {
+      return;
+    }
+    this.isLoading = true;
+
+    this.authService
+      .login(this.form?.value)
+      .pipe(
+        tap((data) => {
+          this.authService.saveUserDataToLocalStorage(data);
+          this.authService.isAuthenticated$.next(true);
+          this.authService.user$.next(data.user);
+          this.authService.token$.next(data.token);
+          this.toastr.success('login Successfully', 'Success');
+          this.router.navigate(['']);
+        }),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe();
   };
+  ngOnDestroy(): void {
+    this._unsubscribe$.next(false);
+    this._unsubscribe$.complete();
+  }
 }

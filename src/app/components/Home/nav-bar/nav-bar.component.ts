@@ -21,15 +21,9 @@ export class NavBarComponent implements OnInit {
   facart = faCartPlus;
   user: User | null = null;
   cart: number = 0;
-  constructor(
-    private store: Store<{ auth: { user: User; token: string; cart: Cart[] } }>,
-    private authService: AuthService
-  ) {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.store.select('auth').subscribe((user) => {
-      this.user = user.user;
-    });
     this.authService.userNumberOfCarts.subscribe((data) => {
       this.cart = data;
     });

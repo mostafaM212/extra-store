@@ -15,41 +15,41 @@
                     <a class="nav-link fw-bold" aria-current="page" routerLink="/category" [routerLinkActive]="'active'">Products</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu fw-bold">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item fw-bold" href="#">Something else here</a></li>
-                    </ul>
+                    <a class="nav-link fw-bold" aria-current="page" routerLink="/category-list" [routerLinkActive]="'active'">Categories</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled">Disabled</a>
                 </li>
             </ul>
             <div class="">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="user === null">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="!authService.isAuthenticated$.getValue()">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" aria-current="page" routerLink="/login" [routerLinkActive]="'active'">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/auth/login" [routerLinkActive]="'active'">
                             <fa-icon [icon]="login" class="me-2"></fa-icon>Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" aria-current="page" routerLink="/register" [routerLinkActive]="'active'">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/auth/register" [routerLinkActive]="'active'">
                             <fa-icon [icon]="register" class="me-2"></fa-icon>Register</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="user != null">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="authService.isAuthenticated$.getValue()">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" aria-current="page" routerLink="/profile" [routerLinkActive]="'active'">
-                            <fa-icon [icon]="login" class="me-2"></fa-icon>{{user.name.firstname + ' ' + user.name.lastname}}
-                        </a>
+                        <button mat-button [matMenuTriggerFor]="menu"><fa-icon [icon]="login" class="me-2"></fa-icon>{{authService.user$.getValue()?.firstName + ' ' + authService.user$.getValue()?.lastName}}
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item routerLink="/auth/profile">
+                              <mat-icon>person</mat-icon>
+                              <span style="font-size: smaller;">Profile</span></button>
+                            <button mat-menu-item routerLink="/category-list/add">
+                                <mat-icon>category</mat-icon>
+                                <span style="font-size: smaller;">Category</span></button>
+                            <button mat-menu-item>
+                              <mat-icon>logout</mat-icon>
+                              <span style="font-size: smaller;">logout</span></button>
+                        </mat-menu>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" aria-current="page" routerLink="/register" [routerLinkActive]="'active'">
+                        <a class="nav-link fw-bold" aria-current="page" routerLink="/auth/register" [routerLinkActive]="'active'">
                             <fa-icon [icon]="facart" class="me-2"></fa-icon>Cart <span class="text-success">({{cart}})</span></a>
                     </li>
                 </ul>

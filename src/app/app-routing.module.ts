@@ -9,9 +9,6 @@ import { ProductsComponent } from './routes/category/products/products.component
 import { SingleCategoryComponent } from './routes/category/single-category/single-category.component';
 import { HomeComponent } from './routes/home/home.component';
 import { ProductResolverResolver } from './services/resolvers/product-resolver.resolver';
-import { LoginComponent } from './routes/auth/login/login.component';
-import { RegisterComponent } from './routes/auth/register/register.component';
-import { UserComponent } from './routes/auth/user/user.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -21,22 +18,14 @@ const routes: Routes = [
     resolve: { product: ProductResolverResolver },
   },
   {
-    path: 'login',
-    component: LoginComponent,
-    title: 'Login - Extra Store',
-    canActivate: [LoginGuard],
+    path: 'auth',
+    loadChildren: () =>
+      import('./routes/auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: 'register',
-    component: RegisterComponent,
-    title: 'Register - Extra Store',
-    canActivate: [LoginGuard],
-  },
-  {
-    path: 'profile',
-    component: UserComponent,
-    title: 'Profile - Extra Store',
-    canActivate: [AuthGuard],
+    path: 'category-list',
+    loadChildren: () =>
+      import('./categories/categories.module').then((m) => m.CategoriesModule),
   },
   {
     path: 'category',

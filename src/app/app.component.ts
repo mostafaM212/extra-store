@@ -18,5 +18,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.productService.getAllProducts();
     this.authService.autoLogin();
+
+    console.log('test');
   }
 }

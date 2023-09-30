@@ -10,6 +10,10 @@ input.ng-invalid.ng-touched {
     width: 25%;
 }
 
+mat-progress-spinner {
+    color: brown;
+}
+
 @media (max-width: 600px) {
     .count {
         width: 100%;

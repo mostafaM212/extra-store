@@ -18,14 +18,17 @@
 
                         </div>
                         <div class="mt-4 text-center">
-                            <button type="submit" class="btn btn-outline-success" *ngIf="!loading" [disabled]="form.invalid && disabled">
+                            <button type="submit" class="btn btn-outline-success" [disabled]="form.invalid && disabled">
+                               <ng-container *ngIf="!isLoading">
                                 <fa-icon [icon]="user" class="me-2"></fa-icon>
                                 login
+                               </ng-container>
+                               <ng-container *ngIf="isLoading">
+                                <mat-spinner  *ngIf="isLoading" [diameter]="20" ></mat-spinner>
+                               </ng-container>
+
                             </button>
-                            <button class="btn btn-outline-success" type="button" disabled *ngIf="loading">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Loading...
-                            </button>
+
                         </div>
                     </div>
                 </form>

@@ -1,0 +1,5 @@
+{
+  ".env": {
+    "JWT_SECRET_KEY": "THIS_IS_AN_SECRET_TO_THIS_APP"
+  }
+}

@@ -44,14 +44,14 @@
                 <div class="formColumn ">
                     <div class="">
                         <label for="fname" class="fw-bold fst-italic">First Name</label>
-                        <input type="text" class="form-control" name="fname" ngModel required #fname="ngModel" minlength="3">
-                        <p class="h6 text-danger" *ngIf="fname.invalid && fname.touched">first name field is required with 3 characters at least</p>
+                        <input type="text" class="form-control" name="firstName" ngModel required #firstName="ngModel" minlength="3">
+                        <p class="h6 text-danger" *ngIf="firstName.invalid && firstName.touched">first name field is required with 3 characters at least</p>
 
                     </div>
                     <div class="w-100">
                         <label for="lname" class="fw-bold fst-italic">Last Name</label>
-                        <input type="text" class="form-control" name="lname" ngModel required #lname="ngModel" minlength="3">
-                        <p class="h6 text-danger" *ngIf="lname.invalid && lname.touched">last name field is required with 3 characters at least</p>
+                        <input type="text" class="form-control" name="lastName" ngModel required #lastName="ngModel" minlength="3">
+                        <p class="h6 text-danger" *ngIf="lastName.invalid && lastName.touched">last name field is required with 3 characters at least</p>
 
                     </div>
                     <div class="w-100">
@@ -82,8 +82,13 @@
         <div class="row d-flex justify-content-center mt-3">
             <div class="col-6 d-flex justify-content-center">
                 <button type="submit" class="btn btn-outline-success" [disabled]="form.invalid">
+                  <ng-container *ngIf="!isLoading">
                     <fa-icon [icon]="userPlus" class="me-2"></fa-icon>
-                    Register</button>
+                    Register
+                  </ng-container>
+                  <mat-spinner *ngIf="isLoading" diameter="20" color="primary"></mat-spinner>
+                </button>
+
             </div>
         </div>
     </form>

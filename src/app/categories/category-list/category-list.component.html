@@ -1,0 +1,14 @@
+<div class="container full-width ">
+    <div class="category-list">
+        <div class="card" *ngFor="let category of categories$ | async" [routerLink]="'/category-list/view/'+ category._id">
+            <div class="card-header">
+                <mat-icon class="icon">{{category.logo}}</mat-icon>
+            </div>
+            <div class="card-content">
+                <p>{{category.name}}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>

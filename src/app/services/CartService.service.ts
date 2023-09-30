@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Product } from './../models/product.model';
 import { setTotalPriceAction } from './../store/actions/auth.actions';
 import { Cart } from './../models/Cart.model';
@@ -9,7 +10,8 @@ import { BehaviorSubject } from 'rxjs';
 export class CartService {
   cartPrices: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   constructor(
-    private store: Store<{ auth: { carts: Cart[]; totalPrice: number } }>
+    private store: Store<{ auth: { carts: Cart[]; totalPrice: number } }>,
+    private http: HttpClient
   ) {}
 
   calculateTotalPrice = (products: Product[]): number => {
@@ -20,8 +22,19 @@ export class CartService {
         totalPrices += product.quantity * +product.price;
       }
     });
-    console.log(totalPrices, 'totla');
+    // console.log(totalPrices, 'totla');
     //this.store.dispatch(setTotalPriceAction({ totalPrice: totalPrices }));
     return totalPrices;
+  };
+
+  getUserCarts = (id: number) => {
+    let userCarts: Cart[] = [];
+    this.http
+      .get('https://fakestoreapi.com/carts/user/' + id)
+      .subscribe((data) => {
+        console.log(data);
+      });
+
+    return userCarts;
   };
 }
